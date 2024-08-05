@@ -30,7 +30,7 @@ class _DetailsState extends State<Details> {
                 child: Icon(Icons.arrow_back_ios_new, color: Colors.black),
               ),
               Image.asset(
-                "images/salad2.png",
+                "images/pizza veg.jpeg",
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height / 2.5,
                 fit: BoxFit.fill,
@@ -42,7 +42,7 @@ class _DetailsState extends State<Details> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Mediterranean", style: AppWidget.SemiBoldTextFieldWidget()),
-                      Text("Chickeap Salad", style: AppWidget.boldTextFieldWidget()),
+                      Text("Vegetables Pizza", style: AppWidget.boldTextFieldWidget()),
                     ],
                   ),
                   Spacer(),
@@ -77,7 +77,7 @@ class _DetailsState extends State<Details> {
               ),
               SizedBox(height: 20.0),
               Text(
-                "Sure, here's a paragraph about Chickpea Salad: Chickpea Salad is a delightful and nutritious dish that combines the hearty texture of chickpeas with the fresh flavors of various vegetables and herbs. This salad typically includes ingredients such as diced cucumbers, bell peppers, cherry tomatoes, and finely chopped red onions, all of which add a refreshing crunch. Fresh parsley and cilantro provide an aromatic depth, while a simple dressing of olive oil, lemon juice, and minced garlic brings everything together with a zesty touch. Optional crumbled feta cheese can add a creamy, tangy element to the mix. Chickpea Salad is not only easy to prepare but also packed with protein and fiber, making it a perfect choice for a healthy meal or a vibrant side dish.",
+                "Sure, here's a paragraph about Vegetable Pizza: Veg Pizza is a delightful and nutritious dish that combines the hearty texture of chickpeas with the fresh flavors of various vegetables and herbs. This salad typically includes ingredients such as diced cucumbers, bell peppers, cherry tomatoes, and finely chopped red onions, all of which add a refreshing crunch. Fresh parsley and cilantro provide an aromatic depth, while a simple dressing of olive oil, lemon juice, and minced garlic brings everything together with a zesty touch. Optional crumbled feta cheese can add a creamy, tangy element to the mix. Chickpea Salad is not only easy to prepare but also packed with protein and fiber, making it a perfect choice for a healthy meal or a vibrant side dish.",
                 style: AppWidget.LightTextFieldWidget(),
               ),
               SizedBox(height: 20.0),
@@ -97,7 +97,7 @@ class _DetailsState extends State<Details> {
                   Column(
                     children: [
                       Text("Total", style: AppWidget.SemiBoldTextFieldWidget()),
-                      Text("Rs 150", style: AppWidget.HeadlineTextFieldWidget()),
+                      Text("\$"+"10", style: AppWidget.HeadlineTextFieldWidget()),
                     ],
                   ),
                   Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:foodshop/Widget/content%20model.dart';
 import 'package:foodshop/Widget/widget_support.dart';
 import 'package:foodshop/pages/signup.dart';
@@ -19,6 +20,15 @@ class _OnboardState extends State<Onboard> {
   void initState() {
     _controller = PageController(initialPage: 0);
     super.initState();
+
+  // Preloading images to reduce delay
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    for (var content in contents) {
+      precacheImage(AssetImage(content.image), context);
+    }
+  });
+
+
   }
 
   @override
@@ -85,7 +95,8 @@ class _OnboardState extends State<Onboard> {
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(contents.length, (index) => buildDot(index)),
+              children:
+                  List.generate(contents.length, (index) => buildDot(index)),
             ),
           ),
           // Action button
@@ -114,7 +125,10 @@ class _OnboardState extends State<Onboard> {
               child: Center(
                 child: Text(
                   currentindex == contents.length - 1 ? "Next" : "Get Started",
-                  style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),

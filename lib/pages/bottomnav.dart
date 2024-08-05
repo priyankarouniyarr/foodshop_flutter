@@ -21,44 +21,37 @@ class _BottomnavState extends State<Bottomnav> {
   late Profile profile;
   late Wallet wallet;
   late Order order;
-  
-@override
+
+  @override
   void initState() {
-  HomePage=Home();
-  profile=Profile();
-  wallet=Wallet();
-  order=Order();
-  pages = [Home(), Profile(), Wallet(), Order()];
+    HomePage = Home();
+    profile = Profile();
+    wallet = Wallet();
+    order = Order();
+    pages = [Home(), Profile(), Wallet(), Order()];
 
     super.initState();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
-        height: 65
-        ,
-        backgroundColor: Colors.green,
-        animationDuration: Duration(milliseconds: 500),
-        onTap:(int index){
-          setState(() {
-            currentIndex = index;
-        } );
-        },
-        items: [
-        Icon(Icons.home_outlined, color:Colors.green),
-        Icon(Icons.person_outline, color: Colors.green),
-        Icon(Icons.wallet_outlined, color: Colors.green),
-        Icon(Icons.shopping_cart_outlined, color: Colors.green),
-      ]
-      
-      ),
+          height: 65,
+          backgroundColor: Colors.green,
+          animationDuration: Duration(milliseconds: 500),
+          onTap: (int index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+          items: [
+            Icon(Icons.home_outlined, color: Colors.green),
+            Icon(Icons.person_outline, color: Colors.green),
+            Icon(Icons.wallet_outlined, color: Colors.green),
+            Icon(Icons.shopping_cart_outlined, color: Colors.green),
+          ]),
       body: pages[currentIndex],
     );
-
   }
 }
