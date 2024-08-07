@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:foodshop/Widget/widget_support.dart';
 import 'package:foodshop/pages/details.dart';
+import 'package:foodshop/service/database.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,6 +18,37 @@ class HomeState extends State<Home> {
   bool burger = false;
   bool salad = false;
 
+Stream? fooditemStream  ;
+ontheload() async{
+  fooditemStream=await DatabaseMethods().getFoodItem("Pizza");
+  setState(() {
+    
+  });
+}
+@override
+void initState() {
+  ontheload();
+  super.initState();
+}
+// Widget allItems() {
+//   return StreamBuilder( stream :fooditemStream ,builder: (context,AsyncSnapshot snapshot){
+// return snapshot.hasData? ListView.builder(
+//   padding: EdgeInsets.zero,
+//   itemCount: snapshot.data.docs.length,
+//   shrinkWrap:true ,
+//   scollDirection: Axis.horizontal,
+//   itemBuilder: (context,index){
+
+
+// },
+
+
+
+
+  
+// CircularProgressIndicator;
+//   },); 
+// }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,13 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:foodshop/Widget/app_constant%20.dart';
-
-
 import 'package:foodshop/admin/admin_login.dart';
-import 'package:foodshop/pages/bottomnav.dart';
-import 'package:foodshop/pages/login.dart';
-import 'package:foodshop/pages/onboard.dart';
+
+import 'package:foodshop/pages/bottomnav.dart'; // Ensure this path is correct
+import 'package:foodshop/pages/home.dart';
+import 'package:foodshop/pages/login.dart'; // Ensure this path is correct
+import 'package:foodshop/pages/onboard.dart'; // Ensure this path is correct
 import 'package:foodshop/pages/signup.dart';
+import 'package:foodshop/splashscreen.dart'; // Ensure this path is correct
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,33 +30,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Define a ValueNotifier to track the login state
-    final ValueNotifier<bool> isAdmin = ValueNotifier<bool>(false); // Default to false (simple user)
-
-    // Placeholder for actual authentication logic
-    // Here you should check if the user is an admin or a simple user from your authentication system
-    Future<void> checkUserRole() async {
-      // Simulate checking user role (replace with actual logic)
-      await Future.delayed(const Duration(seconds: 10)); // Simulate network delay
-      isAdmin.value = true; // Set this based on your actual check
-    }
-
-    // Run the role check
-    checkUserRole();
-
-    return ValueListenableBuilder<bool>(
-      valueListenable: isAdmin,
-      builder: (context, isAdminLoggedIn, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Food Shop App',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
-          home: isAdminLoggedIn ? AdminLogin() : Onboard(), // Choose based on login status
-        );
-      },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+     
+      
+      home: 
+      Bottomnav(), // Update this if you want to use MyHomePage
     );
   }
 }
+ 

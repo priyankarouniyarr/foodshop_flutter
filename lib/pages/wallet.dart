@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:foodshop/Widget/app_constant%20.dart';
  // Ensure the path is correct
 import 'package:foodshop/service/shared_pref.dart';
 import 'package:http/http.dart' as http;
@@ -50,13 +51,13 @@ class _WalletState extends State<Wallet> {
 
   Future<void> displayPaymentSheet() async {
     try {
-      await Stripe.instance.presentPaymentSheet().then((value) async {
-        // Update wallet after successful payment
-        if (wallet != null && amount != null) {
-          int updatedWallet = int.parse(wallet!) + int.parse(amount!);
-          await SharedPreferenceHelper().saveUserWallet(updatedWallet.toString());
-          await getTheSharedPref(); // Refresh wallet balance
-        }
+       await Stripe.instance.presentPaymentSheet().then((value) async {
+      //   // Update wallet after successful payment
+      //   if (wallet != null && amount != null) {
+      //     int updatedWallet = int.parse(wallet!) + int.parse(amount!);
+      //     await SharedPreferenceHelper().saveUserWallet(updatedWallet.toString());
+      //     await getTheSharedPref(); // Refresh wallet balance
+      //   }
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
@@ -97,14 +98,14 @@ class _WalletState extends State<Wallet> {
         'payment_method_types[]': 'card',
       };
       var response = await http.post(
-        Uri.parse('https://your-server-url/create-payment-intent'), // Update the URL
+        Uri.parse('https://api.stripe.com/v1/payment-intents'), // Update the URL
         headers: {
-          'Authorization': 'Bearer your-secret-key', // Update with your actual secret key
+          'Authorization': 'Bearer $scretekey', // Update with your actual secret key
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: body,
       );
-      print('Payment Intent Response: ${response.body}');
+      print('Payment Intent Response: ${response.body.toString()}');
       return jsonDecode(response.body);
     } catch (err) {
       print('Error creating payment intent: ${err.toString()}');
@@ -112,7 +113,7 @@ class _WalletState extends State<Wallet> {
     }
   }
 
-  String calculateAmount(String amount) {
+  String calculateAmount(String amount) {//to prevent from decimal
     final calculatedAmount = int.parse(amount) * 100;
     return calculatedAmount.toString();
   }

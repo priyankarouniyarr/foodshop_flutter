@@ -54,14 +54,14 @@ class _OnboardState extends State<Onboard> {
               },
               itemBuilder: (_, i) {
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 40.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Ensure the image fits within the available width
                       Image.asset(
                         contents[i].image,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         height: MediaQuery.of(context).size.height * 0.4,
                         width: double.infinity,
                       ),
