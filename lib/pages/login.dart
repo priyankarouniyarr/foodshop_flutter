@@ -36,11 +36,9 @@ class _LoginInState extends State<LoginIn> {
     } on FirebaseAuthException catch (e) {
       print('Error Code: ${e.code}');
       String errorMessage;
-      if (e.code == 'user-not-found') {
+      if (e.code == 'invalid-credential') {
         errorMessage = "No user found for that Email";
-      } else if (e.code == 'wrong-password') {
-        errorMessage = "Wrong password provided";
-      } else {
+      }  else {
         errorMessage = "An unexpected error occurred: ${e.code}";
       }
 

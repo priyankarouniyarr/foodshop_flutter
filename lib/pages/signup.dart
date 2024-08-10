@@ -24,7 +24,6 @@ class _SignupState extends State<Signup> {
 
   registration() async {
     if (password != null) {
-
 // SnackBar in Flutter is a lightweight message bar that briefly shows information at the bottom of the screen.
       //The function checks if the password variable is not null before proceeding with registration.
       try {
@@ -38,28 +37,19 @@ class _SignupState extends State<Signup> {
             backgroundColor: Colors.green,
             content: Text(" Registered Successfully",
                 style: TextStyle(fontSize: 20.0)))));
- String Id=randomAlphaNumeric(10);
- 
- 
- 
- Map<String ,dynamic> addUserInfo={
-  "Username":usernamecontroller.text,//wallet
-  "Email":mailcontroller.text,
-  "Wallet":"0",
-  "Id":Id
+        String Id = randomAlphaNumeric(10);
 
- };
-await DatabaseMethods().addUserDetail(addUserInfo, Id);
-await SharedPreferenceHelper().saveUserName(usernamecontroller.text);
-await SharedPreferenceHelper().saveUserEmail(mailcontroller.text);
-await SharedPreferenceHelper().saveUserId(Id);
-await SharedPreferenceHelper().saveUserWallet('0');
-
-
-
-
-
-
+        Map<String, dynamic> addUserInfo = {
+          "Username": usernamecontroller.text, //wallet updates
+          "Email": mailcontroller.text,
+          "Wallet": "0",
+          "Id": Id
+        };
+        await DatabaseMethods().addUserDetail(addUserInfo, Id);
+        await SharedPreferenceHelper().saveUserName(usernamecontroller.text);
+        await SharedPreferenceHelper().saveUserEmail(mailcontroller.text);
+        await SharedPreferenceHelper().saveUserId(Id);
+        await SharedPreferenceHelper().saveUserWallet('0');
 
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginIn()));
@@ -238,27 +228,28 @@ await SharedPreferenceHelper().saveUserWallet('0');
               SizedBox(
                 height: 70.0,
               ),
-              
-               GestureDetector(
-  onTap: () {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => LoginIn()));
-  },
-  child: RichText(
-    text: TextSpan(
-      text: "Already have an account ? ",
-      style: AppWidget.SemiBoldTextFieldWidget(), // Style for the regular text
-      children: [
-        TextSpan(
-          text: "Log In",
-          style: AppWidget.SemiBoldTextFieldWidget().copyWith(
-            color: Color(0xFF87CEEB), // Sky blue color for "Sign Up"
-          ),
-        ),
-      ],
-    ),
-  ),
-)
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginIn()));
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: "Already have an account ? ",
+                    style: AppWidget
+                        .SemiBoldTextFieldWidget(), // Style for the regular text
+                    children: [
+                      TextSpan(
+                        text: "Log In",
+                        style: AppWidget.SemiBoldTextFieldWidget().copyWith(
+                          color:
+                              Color(0xFF87CEEB), // Sky blue color for "Sign Up"
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
             ]),
           )
         ],

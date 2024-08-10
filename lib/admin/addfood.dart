@@ -15,91 +15,73 @@ class Addfood extends StatefulWidget {
 }
 
 class _AddfoodState extends State<Addfood> {
-  final List<String> items = ['Ice-cream', 'Burger', 'Salad', 'Pizza'];
+  final List<String> items = ['Ice-cream', 'Burger', 'Salad', 'Pizza','Momo'];
   String? value;
   TextEditingController namecontroller = TextEditingController();
   TextEditingController pricecontroller = TextEditingController();
   TextEditingController detailscontroller = TextEditingController();
 
-  final ImagePicker picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker();
   File? selectedImage;
 
   Future<void> getImage() async {
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        selectedImage = File(image.path);
-      });
-    }
+    var image = await _picker.pickImage(source: ImageSource.gallery);
+    selectedImage = File(image!.path);
+    setState(() {});
   }
-
-  Future<void> uploadItem() async {
-    if (selectedImage != null && namecontroller.text.isNotEmpty &&
-        pricecontroller.text.isNotEmpty && detailscontroller.text.isNotEmpty &&
-        value != null) {
-      String addId = randomAlphaNumeric(10);
-      Reference firebaseStorageRef = FirebaseStorage.instance
-          .ref()
-          .child("blogImages")
-          .child(addId);
-
-      try {
-        // Start the upload task
-        UploadTask task = firebaseStorageRef.putFile(selectedImage!);
-
-        // Wait for the upload to complete
-        TaskSnapshot snapshot = await task;
-
-        // Get the download URL
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-
-        Map<String, dynamic> addItem = {
-          "name": namecontroller.text,
-          "Image": downloadUrl,
-          "price": pricecontroller.text,
-          "Details": detailscontroller.text,
-          "category": value ?? '',
-        };
-
-        // Add item to the database
-        await DatabaseMethods().addFoodItem(addItem, value!);
-
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.orangeAccent,
-            content: Text(
-              "Food Item has been added successfully",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-        );
-      } catch (e) {
-        print('Error uploading image: $e');
-        // Handle upload error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.redAccent,
-            content: Text(
-              "Failed to upload the item.",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-        );
-      }
-    } else {
-      // Handle empty fields or missing image
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.redAccent,
-          content: Text(
-            "Please complete all fields and select an image.",
-            style: TextStyle(fontSize: 18),
-          ),
+uploadItem() async {
+  if (selectedImage == null ||
+      namecontroller.text.isEmpty ||
+      pricecontroller.text.isEmpty ||
+      detailscontroller.text.isEmpty ||
+      value == null || value!.isEmpty) {
+    // Show a message if any field is empty
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          "All fields are required!",
+          style: TextStyle(fontSize: 18),
         ),
-      );
-    }
+      ),
+    );
+    return; // Stop the function here
   }
+
+  String addId = randomAlphaNumeric(10); // Add data to Firebase Storage
+
+  Reference firebaseStorageRef =
+      FirebaseStorage.instance.ref().child("blogImages").child(addId);
+
+  // Start the upload task
+  final UploadTask task = firebaseStorageRef.putFile(selectedImage!);
+  // Get the download URL
+  var downloadUrl = await (await task).ref.getDownloadURL();
+
+  Map<String, dynamic> addItem = {
+    "name": namecontroller.text,
+    "Image": downloadUrl,
+    "price": pricecontroller.text,
+    "Details": detailscontroller.text,
+    "category": value ?? '',
+  };
+
+  // Add item to the database
+  await DatabaseMethods().addFoodItem(addItem, value!).then((value) {
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.orangeAccent,
+        content: Text(
+          "Food Item has been added successfully",
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  });
+}
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -111,18 +93,23 @@ class _AddfoodState extends State<Addfood> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back_ios_new_outlined,
-              color: Color(0xFF373866)),
+          child:
+              Icon(Icons.arrow_back_ios_new_outlined, color: Color(0xFF373866)),
         ),
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 50.0),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Upload the Item Picture', style: AppWidget.SemiBoldTextFieldWidget()),
+          margin:
+              EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 50.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Upload the Item Picture',
+                style: AppWidget.SemiBoldTextFieldWidget()),
             SizedBox(height: 20.0),
             GestureDetector(
-              onTap: getImage,
+              onTap: () {
+                getImage();
+              },
               child: selectedImage == null
                   ? Center(
                       child: Material(
@@ -132,9 +119,11 @@ class _AddfoodState extends State<Addfood> {
                           height: 150,
                           width: 150,
                           decoration: BoxDecoration(
-                              border: Border.all(width: 1.5, color: Colors.black),
+                              border:
+                                  Border.all(width: 1.5, color: Colors.black),
                               borderRadius: BorderRadius.circular(20.0)),
-                          child: Icon(Icons.camera_alt_outlined, color: Colors.black),
+                          child: Icon(Icons.camera_alt_outlined,
+                              color: Colors.black),
                         ),
                       ),
                     )
@@ -146,11 +135,13 @@ class _AddfoodState extends State<Addfood> {
                           height: 150,
                           width: 150,
                           decoration: BoxDecoration(
-                              border: Border.all(width: 1.5, color: Colors.black),
+                              border:
+                                  Border.all(width: 1.5, color: Colors.black),
                               borderRadius: BorderRadius.circular(20.0)),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
-                            child: Image.file(selectedImage!, fit: BoxFit.cover),
+                            child:
+                                Image.file(selectedImage!, fit: BoxFit.cover),
                           ),
                         ),
                       ),
@@ -226,10 +217,14 @@ class _AddfoodState extends State<Addfood> {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  items: items.map((item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item, style: TextStyle(fontSize: 20.0, color: Colors.black)),
-                  )).toList(),
+                  items: items
+                      .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item,
+                                style: TextStyle(
+                                    fontSize: 20.0, color: Colors.black)),
+                          ))
+                      .toList(),
                   onChanged: (value) => setState(() {
                     this.value = value;
                   }),
@@ -258,7 +253,8 @@ class _AddfoodState extends State<Addfood> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
-                      child: Text("Add",
+                      child: Text(
+                        "Add",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22.0,
