@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodshop/Widget/widget_support.dart';
+import 'package:foodshop/admin/adminhome.dart';
 import 'package:foodshop/pages/bottomnav.dart';
 import 'package:foodshop/pages/forgetpassword.dart';
 import 'package:foodshop/pages/signup.dart';
@@ -26,11 +27,16 @@ class _LoginInState extends State<LoginIn> {
       isLoading = true; // Show loading screen
     });
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final resp = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
         await Future.delayed(Duration(seconds: 4));//LOADING SCREEN
+      if(resp.user!.email == "priyankarouniyar34@gmail.com"){
+        Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeAdmin()));
+        return;
+      }
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Bottomnav()));
     } on FirebaseAuthException catch (e) {

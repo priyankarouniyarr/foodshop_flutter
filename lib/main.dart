@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -10,7 +11,7 @@ import 'package:foodshop/pages/login.dart'; // Ensure this path is correct
 import 'package:foodshop/pages/onboard.dart'; // Ensure this path is correct
 import 'package:foodshop/pages/signup.dart';
 import 'package:foodshop/splashscreen.dart'; // Ensure this path is correct
-
+final auth  = FirebaseAuth.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = publishablekey; // Use the constant from app_constant.dart
@@ -36,7 +37,20 @@ class MyApp extends StatelessWidget {
      
       
       home: 
-  Bottomnav(),// Update this if you want to use MyHomePage
+  Builder(
+    builder: (context) {
+      print(auth.currentUser);
+      if(auth.currentUser != null){
+
+        if(auth.currentUser!.email == "priyankarouniyar34@gmail.com"){
+          return HomeAdmin();
+        }
+        return Bottomnav();
+      }
+      
+      return SplashScreen();
+    }
+  ),// Update this if you want to use MyHomePage
     );
   }
 }

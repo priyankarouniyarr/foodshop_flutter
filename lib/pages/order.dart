@@ -21,7 +21,7 @@ class _OrderState extends State<Order> {
                       padding: EdgeInsets.only(bottom: 10.0),
                       child: Center(
                         child: Text(
-                          "Wallet",
+                          "Food Cart",
                           style: AppWidget.HeadlineTextFieldWidget()
                           
                         ),

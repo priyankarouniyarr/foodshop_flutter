@@ -7,6 +7,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:foodshop/service/auth.dart';
 import 'package:foodshop/service/shared_pref.dart';
+import 'package:foodshop/splashscreen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
 
@@ -67,172 +68,69 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:name==null? CircularProgressIndicator(): Container(
-            child: Column(
-      children: [
-        Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                top: 45.0,
-                left: 20.0,
-                right: 20.0,
-              ),
-              height: MediaQuery.of(context).size.height / 4.2,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.lightGreen,
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.elliptical(
-                        MediaQuery.of(context).size.width, 110),
-                  )),
-            ),
-            Center(
-              child: Container(
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height / 6.5),
-                child: Material(
-                    elevation: 10.0,
-                    borderRadius: BorderRadius.circular(60.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(60.0),
-                      child: selectedImage==null?
-                      GestureDetector(
-                        onTap:(){
-                          getImage();
-                        },
-                        child:profile==null?Image.asset(" images/profile.jpg",height:150,width:120,fit:BoxFit.cover):Image.network(
-                          profile!,
-                            height: 120, width: 150, fit: BoxFit.cover)
-                      ):
-                      Image.file(selectedImage!),
+        body:name==null? CircularProgressIndicator(): SingleChildScrollView(
+          child: Container(
+              child: Column(
+                children: [
+          Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  top: 45.0,
+                  left: 20.0,
+                  right: 20.0,
+                ),
+                height: MediaQuery.of(context).size.height / 4.2,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Colors.lightGreen,
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.elliptical(
+                          MediaQuery.of(context).size.width, 110),
                     )),
               ),
-            ),
-            Padding(
-                padding: EdgeInsets.only(top: 70.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      name!,
-                      style: TextStyle(
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    )
-                  ],
-                ))
-          ],
-        ),
-        SizedBox(
-          height: 20.0,
-        ),
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Material(
-                elevation: 2.0,
-                borderRadius: BorderRadius.circular(10.0),
+              Center(
                 child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Row(children: [
-                      Icon(Icons.person, color: Colors.black),
-                      SizedBox(width: 20.0),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Name',
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-                            ),
-                            Text(
-                              name!,
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-                            ),
-                          ])
-                    ])))),
-        SizedBox(
-          height: 20.0,
-        ),
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Material(
-                elevation: 2.0,
-                borderRadius: BorderRadius.circular(10.0),
-                child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Row(children: [
-                      Icon(Icons.email, color: Colors.black),
-                      SizedBox(width: 20.0),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Email',
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-                            ),
-                            Text(
-                              email!,
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-                            ),
-                          ])
-                    ])))),
-        SizedBox(
-          height: 20.0,
-        ),
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Material(
-                elevation: 2.0,
-                borderRadius: BorderRadius.circular(10.0),
-                child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Row(children: [
-                      Icon(Icons.description, color: Colors.black),
-                      SizedBox(width: 20.0),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Terms and Condition',
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.blueAccent),
-                            ),
-                          ])
-                    ])))),
-        SizedBox(
-          height: 20.0,
-        ),
-        GestureDetector(
-          onTap: ()  {
-AuthMethods().deleteuser();},
-          child: Container(
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 6.5),
+                  child: Material(
+                      elevation: 10.0,
+                      borderRadius: BorderRadius.circular(60.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(60.0),
+                        child: selectedImage==null?
+                        GestureDetector(
+                          onTap:(){
+                            getImage();
+                          },
+                          child:profile==null?Icon(Icons.person, size: 100, color: Colors.grey,):Image.network(
+                            profile!,
+                              height: 100, width:50 , fit: BoxFit.cover)
+                        ):
+                        Image.file(selectedImage!),
+                      )),
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 70.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        name!,
+                        style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      )
+                    ],
+                  ))
+            ],
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Container(
               margin: EdgeInsets.symmetric(horizontal: 20.0),
               child: Material(
                   elevation: 2.0,
@@ -244,28 +142,31 @@ AuthMethods().deleteuser();},
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Row(children: [
-                        Icon(Icons.delete, color: Colors.black),
+                        Icon(Icons.person, color: Colors.black),
                         SizedBox(width: 20.0),
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Delete',
+                                'Name',
                                 style: TextStyle(
-                                    fontSize: 20.0,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                name!,
+                                style: TextStyle(
+                                    fontSize: 16.0,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black),
                               ),
                             ])
                       ])))),
-        ),
-        SizedBox(
-          height: 20.0,
-        ),
-        GestureDetector(
-          onTap: () {
-            AuthMethods().SignOut();},
-          child: Container(
+          SizedBox(
+            height: 20.0,
+          ),
+          Container(
               margin: EdgeInsets.symmetric(horizontal: 20.0),
               child: Material(
                   elevation: 2.0,
@@ -277,22 +178,127 @@ AuthMethods().deleteuser();},
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Row(children: [
-                        Icon(Icons.logout, color: Colors.black),
+                        Icon(Icons.email, color: Colors.black),
                         SizedBox(width: 20.0),
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'LogOut',
+                                'Email',
                                 style: TextStyle(
-                                    fontSize: 20.0,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                email!,
+                                style: TextStyle(
+                                    fontSize: 16.0,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black),
                               ),
                             ])
                       ])))),
-        ),
-      ],
-    )));
+          SizedBox(
+            height: 20.0,
+          ),
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Material(
+                  elevation: 2.0,
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: Row(children: [
+                        Icon(Icons.description, color: Colors.black),
+                        SizedBox(width: 20.0),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Terms and Condition',
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blueAccent),
+                              ),
+                            ])
+                      ])))),
+          SizedBox(
+            height: 20.0,
+          ),
+          GestureDetector(
+            onTap: ()  {
+          AuthMethods().deleteuser();},
+            child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Material(
+                    elevation: 2.0,
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Row(children: [
+                          Icon(Icons.delete, color: Colors.black),
+                          SizedBox(width: 20.0),
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ),
+                              ])
+                        ])))),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          GestureDetector(
+            onTap: ()async {
+              await AuthMethods().SignOut();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SplashScreen()));
+              
+              },
+            child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Material(
+                    elevation: 2.0,
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Row(children: [
+                          Icon(Icons.logout, color: Colors.black),
+                          SizedBox(width: 20.0),
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'LogOut',
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ),
+                              ])
+                        ])))),
+          ),
+                ],
+              )),
+        ));
   }
 }
