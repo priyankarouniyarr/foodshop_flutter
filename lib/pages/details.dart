@@ -49,6 +49,7 @@ class _DetailsState extends State<Details> {
           margin: EdgeInsets.only(top: 50.0, right: 20.0, left: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
                 onTap: () {
@@ -56,24 +57,34 @@ class _DetailsState extends State<Details> {
                 },
                 child: Icon(Icons.arrow_back_ios_new, color: Colors.black),
               ),
+              SizedBox(
+                height: 20.0,
+              ),
+              
               ClipRRect(
                 borderRadius: BorderRadius.circular(30.0),
                 child: Image.network(
                   widget.image,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 2.5,
+                  height: MediaQuery.of(context).size.height / 3.5,
                   fit: BoxFit.cover,
                 ),
               ),
               SizedBox(height: 15.0),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(widget.name,
-                          style: AppWidget.SemiBoldTextFieldWidget()),
-                    ],
+
+                  Container(
+                    
+                    width:MediaQuery.of(context).size.width/2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.name,
+                            style: AppWidget.SemiBoldTextFieldWidget()),
+                      ],
+                    ),
                   ),
                   Spacer(),
                   GestureDetector(

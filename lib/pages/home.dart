@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -26,18 +27,20 @@ class HomeState extends State<Home> {
   bool more = false;
 
   Stream? fooditemStream;
+  
 
   ontheload() async {
     fooditemStream = await DatabaseMethods().getFoodItem("Ice-cream");
     setState(() {});
   }
-
+   
   @override
   void initState() {
     ontheload();
+    
     super.initState();
   }
-
+ 
   Widget allItems() {
     return StreamBuilder(
       stream: fooditemStream,
@@ -64,11 +67,13 @@ class HomeState extends State<Home> {
                   );
                 },
                 child: Container(
+                    
                   margin: EdgeInsets.all(4),
                   child: Material(
                     elevation: 5,
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
+                   
                         padding: EdgeInsets.all(14),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,14 +89,14 @@ class HomeState extends State<Home> {
                               height: 5.0,
                             ),
                             Text(ds['name'],
-                                style: AppWidget.SemiBoldTextFieldWidget()),
+                                style: AppWidget.SemiBoldTextFieldWidget().copyWith(fontSize: 14)),
                             SizedBox(
                               height: 5.0,
                             ),
                             Text(" Fresh and Healthy",
                                 style: AppWidget.LightTextFieldWidget()),
                             SizedBox(height: 5.0),
-                            Text("Rs\t" + ds['price'],
+                            Text("Rs\t" + ds['price'] ,
                                 style: AppWidget.boldTextFieldWidget()),
                           ],
                         )),
@@ -217,22 +222,23 @@ class HomeState extends State<Home> {
                   margin: EdgeInsets.only(right: 20.0),
                   padding: EdgeInsets.all(3),
                   decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: Colors.green,
                       borderRadius: BorderRadius.circular(8)),
                   child: Icon(Icons.shopping_cart, color: Colors.white),
                 ),
               ],
             ),
             SizedBox(height: 30),
-            Text("Delicious Food", style: AppWidget.HeadlineTextFieldWidget()),
-            Text("Discover and Get Great Food",
+            Text("Deliciousness in Every Easy Bite", style: AppWidget.HeadlineTextFieldWidget().copyWith(fontSize:20,color: const Color.fromARGB(255, 65, 117, 67))),
+            Text("Simple, Satisfying, and Always Delicious!",
                 style: AppWidget.LightTextFieldWidget()),
             SizedBox(height: 20),
-            Container(margin: EdgeInsets.only(right: 20.0), 
+            Container(margin: EdgeInsets.only(right: 20.0), height:100,
       
             child: showItem()),
-            SizedBox(height: 30),
-            Container(height: 330, child: allItems()),
+            
+            Container(height: 330, 
+            child: allItems()),
             SizedBox(
               height: 50.0,
             ),
@@ -590,7 +596,7 @@ class HomeState extends State<Home> {
                 child: Image.asset(
                   "images/itali.png",
                   height: 40,
-                  width: 40,
+                  width: 60,
                   fit: BoxFit.cover,
                  
                 ),

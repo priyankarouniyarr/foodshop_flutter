@@ -29,59 +29,66 @@ class _AddfoodState extends State<Addfood> {
     selectedImage = File(image!.path);
     setState(() {});
   }
-uploadItem() async {
-  if (selectedImage == null ||
-      namecontroller.text.isEmpty ||
-      pricecontroller.text.isEmpty ||
-      detailscontroller.text.isEmpty ||
-      value == null || value!.isEmpty) {
-    // Show a message if any field is empty
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.red,
-        content: Text(
-          "All fields are required!",
-          style: TextStyle(fontSize: 18),
+
+  uploadItem() async {
+    if (selectedImage == null ||
+        namecontroller.text.isEmpty ||
+        pricecontroller.text.isEmpty ||
+        detailscontroller.text.isEmpty ||
+        value == null || value!.isEmpty) {
+      // Show a message if any field is empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            "All fields are required!",
+            style: TextStyle(fontSize: 18),
+          ),
         ),
-      ),
-    );
-    return; // Stop the function here
+      );
+      return; // Stop the function here
+    }
+
+    String addId = randomAlphaNumeric(10); // Add data to Firebase Storage
+
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child("blogImages").child(addId);
+
+    // Start the upload task
+    final UploadTask task = firebaseStorageRef.putFile(selectedImage!);
+    // Get the download URL
+    var downloadUrl = await (await task).ref.getDownloadURL();
+
+    Map<String, dynamic> addItem = {
+      "name": namecontroller.text,
+      "Image": downloadUrl,
+      "price": pricecontroller.text,
+      "Details": detailscontroller.text,
+      "category": value ?? '',
+    };
+
+
+
+    // Add item to the database
+    await DatabaseMethods().addFoodItem(addItem, value!).then((value) {
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.orangeAccent,
+          content: Text(
+            "Food Item has been added successfully",
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+      );
+
+      // Refresh the page after adding the item
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Addfood()),
+      );
+    });
   }
-
-  String addId = randomAlphaNumeric(10); // Add data to Firebase Storage
-
-  Reference firebaseStorageRef =
-      FirebaseStorage.instance.ref().child("blogImages").child(addId);
-
-  // Start the upload task
-  final UploadTask task = firebaseStorageRef.putFile(selectedImage!);
-  // Get the download URL
-  var downloadUrl = await (await task).ref.getDownloadURL();
-
-  Map<String, dynamic> addItem = {
-    "name": namecontroller.text,
-    "Image": downloadUrl,
-    "price": pricecontroller.text,
-    "Details": detailscontroller.text,
-    "category": value ?? '',
-  };
-
-  // Add item to the database
-  await DatabaseMethods().addFoodItem(addItem, value!).then((value) {
-    // Show success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.orangeAccent,
-        content: Text(
-          "Food Item has been added successfully",
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
-    );
-  });
-}
-
-  
 
   @override
   Widget build(BuildContext context) {

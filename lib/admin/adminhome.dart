@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:foodshop/Widget/widget_support.dart';
 import 'package:foodshop/admin/addfood.dart';
+import 'package:foodshop/pages/login.dart';
 
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({super.key});
@@ -14,16 +15,28 @@ class _HomeAdminState extends State<HomeAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+         appBar: AppBar(
+        title: Text("Home Admin", style: AppWidget.HeadlineTextFieldWidget()),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout, color: Colors.black),
+            onPressed: () {
+              // Navigate to the login page when logout icon is pressed
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginIn()),
+              );
+            },
+          ),
+        ],
+      ),
         body: Container(
             margin: EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
             child: Column(
               children: [
-                Center(
-                    child: Text("Home Admin",
-                        style: AppWidget.HeadlineTextFieldWidget())),
-                SizedBox(
-                  height: 50.0,
-                ),
+                
+          
                 GestureDetector(
                   onTap: () {
                     Navigator.push(

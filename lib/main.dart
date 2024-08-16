@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       
       return SplashScreen();
     }
-  ),// Update this if you want to use MyHomePage
+  ),
     );
   }
 }
