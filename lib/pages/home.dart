@@ -19,6 +19,11 @@ class HomeState extends State<Home> {
   bool burger = false;
   bool salad = false;
   bool momo = false;
+  bool sweets= false;
+  bool drinks =false;
+  bool noodles = false;
+  bool itali =false;
+  bool more = false;
 
   Stream? fooditemStream;
 
@@ -223,7 +228,9 @@ class HomeState extends State<Home> {
             Text("Discover and Get Great Food",
                 style: AppWidget.LightTextFieldWidget()),
             SizedBox(height: 20),
-            Container(margin: EdgeInsets.only(right: 20.0), child: showItem()),
+            Container(margin: EdgeInsets.only(right: 20.0), 
+      
+            child: showItem()),
             SizedBox(height: 30),
             Container(height: 330, child: allItems()),
             SizedBox(
@@ -238,158 +245,360 @@ class HomeState extends State<Home> {
 
   //categories
   Widget showItem() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        InkWell(
-          onTap: () async {
-            icecream = true;
-            pizza = false;
-            burger = false;
-            salad = false;
-            momo = false;
-            fooditemStream = await DatabaseMethods().getFoodItem("Ice-cream");
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(
-                color: icecream ? Colors.green : Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(8),
-              child: Image.asset(
-                "images/ice-cream.png",
-                height: 40,
-                width: 40,
-                fit: BoxFit.cover,
-                color: icecream ? Colors.black : Colors.black,
-              ),
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            icecream = false;
-            pizza = true;
-            burger = false;
-            salad = false;
-            momo = false;
-            fooditemStream = await DatabaseMethods().getFoodItem("Pizza");
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(
-                color: pizza ? Colors.green : Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(8),
-              child: Image.asset(
-                "images/pizza.png",
-                height: 40,
-                width: 40,
-                fit: BoxFit.cover,
-                color: pizza ? Colors.white : Colors.black,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () async {
+             icecream =true;
+              pizza = false;
+              burger = false;
+              salad = false;
+              momo = false;
+              itali= false;
+              drinks= false;
+              sweets= false;
+              noodles=false;
+              more =false;
+              fooditemStream = await DatabaseMethods().getFoodItem("Ice-cream");
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: icecream ? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/ice-cream.png",
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                  color: icecream ? Colors.black : Colors.black,
+                ),
               ),
             ),
           ),
-        ),
-        InkWell(
-          onTap: () async {
-            icecream = false;
-            pizza = false;
-            burger = false;
-            salad = true;
-            momo = false;
-            fooditemStream = await DatabaseMethods().getFoodItem("Salad");
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(
-                color: salad ? Colors.green : Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(8),
-              child: Image.asset(
-                "images/salad.png",
-                height: 40,
-                width: 40,
-                fit: BoxFit.cover,
-                color: salad ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            icecream = false;
-            pizza = false;
-            burger = true;
-            salad = false;
-            momo = false;
-            fooditemStream = await DatabaseMethods().getFoodItem("Burger");
+          SizedBox(
+            width: 5,
 
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(
-                color: burger ? Colors.green : Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(8),
-              child: Image.asset(
-                "images/burger.png",
-                height: 40,
-                width: 40,
-                fit: BoxFit.cover,
-                color: burger ? Colors.white : Colors.black,
+          ),
+
+          InkWell(
+            onTap: () async {
+               icecream =false;
+              pizza = true;
+              burger = false;
+              salad = false;
+              momo = false;
+              itali= false;
+              drinks= false;
+              sweets= false;
+              noodles=false;
+              more =false;
+              fooditemStream = await DatabaseMethods().getFoodItem("Pizza");
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: pizza ? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/pizza.png",
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                  color: pizza ? Colors.white : Colors.black,
+                ),
               ),
             ),
           ),
-        ),
-        InkWell(
-          onTap: () async {
-            icecream = false;
-            pizza = false;
-            burger = false;
-            salad = false;
-            momo = true;
+            SizedBox(
+            width: 5,
 
-            fooditemStream = await DatabaseMethods().getFoodItem("Momo");
+          ),
 
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(
-                color: momo ? Colors.green : Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(8),
-              child: Image.asset(
-                "images/momo.png",
-                height: 40,
-                width: 40,
-                fit: BoxFit.cover,
-                color: momo ? Colors.white : Colors.black,
+          InkWell(
+            onTap: () async {
+              icecream =false;
+              pizza = false;
+              burger = false;
+              salad = true;
+              momo = false;
+              itali= false;
+              drinks= false;
+              sweets= false;
+              noodles=false;
+              more =false;
+              fooditemStream = await DatabaseMethods().getFoodItem("Salad");
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: salad ? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/salad.png",
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                  color: salad ? Colors.white : Colors.black,
+                ),
               ),
             ),
           ),
-        ),
-      ],
+            SizedBox(
+            width: 5,
+
+          ),
+
+          InkWell(
+            onTap: () async {
+            icecream =false;
+              pizza = false;
+              burger = true;
+              salad = false;
+              momo = false;
+              itali= false;
+              drinks= false;
+              sweets= false;
+              noodles=false;
+              more =false;
+              fooditemStream = await DatabaseMethods().getFoodItem("Burger");
+      
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: burger ? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/burger.png",
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                  color: burger ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+          ),
+            SizedBox(
+            width: 5,
+
+          ),
+
+          InkWell(
+            onTap: () async {
+              icecream =false;
+              pizza = false;
+              burger = false;
+              salad = false;
+              momo = true;
+              itali= false;
+              drinks= false;
+              sweets= false;
+              noodles=false;
+              more =false;
+              fooditemStream = await DatabaseMethods().getFoodItem("Momo");
+      
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: momo ? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/momo.png",
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                  color: momo ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+          ),
+            SizedBox(
+            width: 5,
+
+          ),
+
+              InkWell(
+            onTap: () async {
+               icecream =false;
+              pizza = false;
+              burger = false;
+              salad = false;
+              momo = false;
+              itali= false;
+              drinks= false;
+              sweets= true;
+              noodles=false;
+              more =false;
+              fooditemStream = await DatabaseMethods().getFoodItem("Sweets");
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: sweets ? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/sweets.png",
+                  height: 40,
+                  width: 50,
+                  fit: BoxFit.contain,
+                  color: sweets ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+          ),
+            SizedBox(
+            width: 5,
+
+          ),
+
+              InkWell(
+            onTap: () async {
+               icecream =false;
+              pizza = false;
+              burger = false;
+              salad = false;
+              momo = false;
+              itali= false;
+              drinks= true;
+              sweets= false;
+              noodles=false;
+              more =false;
+              fooditemStream = await DatabaseMethods().getFoodItem("Drinks");
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: drinks ? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/drinks.png",
+                  height: 40,
+                  width: 50,
+                  fit: BoxFit.cover,
+                 color: drinks ? Colors.black : Colors.black,
+                ),
+              ),
+            ),
+          ), 
+            SizedBox(
+            width: 5,
+
+          ),
+   InkWell(
+            onTap: () async {
+              icecream =false;
+              pizza = false;
+              burger = false;
+              salad = false;
+              momo = false;
+              itali= false;
+              drinks= false;
+              sweets= false;
+              noodles=true;
+              more =false;
+              fooditemStream = await DatabaseMethods().getFoodItem("Noodles");
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: noodles? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/noodles.png",
+                  height: 40,
+                  width: 50,
+                  fit: BoxFit.cover,
+                 // color: noodles ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+          ),
+            SizedBox(
+            width: 5,
+
+          ),
+    InkWell(
+            onTap: () async {
+              icecream =false;
+              pizza = false;
+              burger = false;
+              salad = false;
+              momo = false;
+              itali= true;
+              drinks= false;
+              sweets= false;
+              noodles=false;
+              more =false;
+
+              fooditemStream = await DatabaseMethods().getFoodItem("Itali");
+              setState(() {});
+            },
+            child: Material(
+              elevation: 5,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: itali ? Colors.green : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(8),
+                child: Image.asset(
+                  "images/itali.png",
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                 
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
