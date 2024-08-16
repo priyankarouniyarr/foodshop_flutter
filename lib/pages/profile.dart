@@ -107,9 +107,9 @@ class _ProfileState extends State<Profile> {
                           },
                           child:profile==null?Icon(Icons.person, size: 100, color: Colors.grey,):Image.network(
                             profile!,
-                              height: 100, width:50 , fit: BoxFit.cover)
+                              height: 120, width:120 , fit: BoxFit.cover)
                         ):
-                        Image.file(selectedImage!),
+                        Image.file(selectedImage!,height:120,width:120,fit:BoxFit.cover),
                       )),
                 ),
               ),

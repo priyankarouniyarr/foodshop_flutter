@@ -70,7 +70,7 @@ class _DetailsState extends State<Details> {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 15.0),
+              SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -121,13 +121,14 @@ class _DetailsState extends State<Details> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 30.0),
               Text(
                 widget.description,
-                style: AppWidget.LightTextFieldWidget(),
+                style: AppWidget.LightTextFieldWidget().copyWith(wordSpacing: 20),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 30.0),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Delivery Time", style: AppWidget.boldTextFieldWidget()),
                   SizedBox(width: 25.0),

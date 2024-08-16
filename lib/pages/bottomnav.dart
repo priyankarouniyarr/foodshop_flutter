@@ -20,15 +20,15 @@ class _BottomnavState extends State<Bottomnav> {
   late Home HomePage;
   late Profile profile;
   late Wallet wallet;
-  late Order order;
+  late Ordering order;
 
   @override
   void initState() {
     HomePage = Home();
     profile = Profile();
     wallet = Wallet();
-    order = Order();
-    pages = [Home(), Profile(), Wallet(), Order()];
+    order = Ordering();
+    pages = [Home(), Profile(), Wallet(), Ordering()];
 
     super.initState();
   }

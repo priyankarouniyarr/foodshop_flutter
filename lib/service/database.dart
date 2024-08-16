@@ -12,7 +12,7 @@ class DatabaseMethods {
     return await FirebaseFirestore.instance
         .collection('users')
         .doc(id)
-        .update({'wallet': amount});
+        .update({'Wallet': amount});
   }
 
   //food adding items
@@ -34,4 +34,11 @@ class DatabaseMethods {
         .collection('Cart')
         .add(userInfoMap);
   }
+   Future<Stream<QuerySnapshot>> getFoodCart(
+      String
+          id) // details that store in firebase//helps to get all the data from firestore database
+  async {
+    return await FirebaseFirestore.instance.collection("users").doc(id).collection("Cart").snapshots();
+  }
+
 }

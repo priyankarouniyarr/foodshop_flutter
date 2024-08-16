@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:foodshop/Widget/widget_support.dart';
 import 'package:foodshop/pages/details.dart';
+import 'package:foodshop/pages/order.dart';
 import 'package:foodshop/service/database.dart';
 
 class Home extends StatefulWidget {
@@ -97,7 +98,7 @@ class HomeState extends State<Home> {
                                 style: AppWidget.LightTextFieldWidget()),
                             SizedBox(height: 5.0),
                             Text("Rs\t" + ds['price'] ,
-                                style: AppWidget.boldTextFieldWidget()),
+                                style: AppWidget.boldTextFieldWidget().copyWith(fontSize: 18.0)),
                           ],
                         )),
                   ),
@@ -218,13 +219,22 @@ class HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Hello Priyanka", style: AppWidget.boldTextFieldWidget()),
-                Container(
-                  margin: EdgeInsets.only(right: 20.0),
-                  padding: EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Icon(Icons.shopping_cart, color: Colors.white),
+                InkWell(
+                  onTap: () {
+                      Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Ordering()),
+                              );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(right: 20.0),
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Icon(Icons.shopping_cart, color: Colors.white),
+                  ),
                 ),
               ],
             ),
