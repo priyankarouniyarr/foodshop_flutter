@@ -6,11 +6,11 @@ import 'package:foodshop/Widget/app_constant%20.dart';
 import 'package:foodshop/admin/addfood.dart';
 import 'package:foodshop/admin/admin_login.dart';
 import 'package:foodshop/admin/adminhome.dart';
-import 'package:foodshop/pages/bottomnav.dart'; // Ensure this path is correct
-import 'package:foodshop/pages/login.dart'; // Ensure this path is correct
-import 'package:foodshop/pages/onboard.dart'; // Ensure this path is correct
+import 'package:foodshop/pages/bottomnav.dart'; 
+import 'package:foodshop/pages/login.dart'; 
+import 'package:foodshop/pages/onboard.dart';
 import 'package:foodshop/pages/signup.dart';
-import 'package:foodshop/splashscreen.dart'; // Ensure this path is correct
+import 'package:foodshop/splashscreen.dart'; 
 final auth  = FirebaseAuth.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

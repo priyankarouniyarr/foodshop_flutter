@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:foodshop/pages/login.dart';
+import 'package:foodshop/pages/signup.dart';
 import 'package:foodshop/service/auth.dart';
 import 'package:foodshop/service/shared_pref.dart';
 import 'package:foodshop/splashscreen.dart';
@@ -83,7 +85,7 @@ class _ProfileState extends State<Profile> {
                 height: MediaQuery.of(context).size.height / 4.2,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    color: Colors.lightGreen,
+                    color: Colors.green,
                     borderRadius: BorderRadius.vertical(
                       bottom: Radius.elliptical(
                           MediaQuery.of(context).size.width, 110),
@@ -230,44 +232,76 @@ class _ProfileState extends State<Profile> {
                       ])))),
           SizedBox(
             height: 20.0,
-          ),
-          GestureDetector(
-            onTap: ()  {
-          AuthMethods().deleteuser();},
-            child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Material(
-                    elevation: 2.0,
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Row(children: [
-                          Icon(Icons.delete, color: Colors.black),
-                          SizedBox(width: 20.0),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Delete',
-                                  style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black),
-                                ),
-                              ])
-                        ])))),
-          ),
+          ),GestureDetector(
+  onTap: () async {
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator( strokeWidth: 5.0,
+            color: Colors.lightGreen[300],),
+        );
+      },
+    );
+
+    // lete operation
+    await AuthMethods().deleteuser();
+
+    // Delay for 2 seconds
+    await Future.delayed(Duration(seconds: 2));
+
+    
+    Navigator.pop(context);
+
+    // Navigate to signup page
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Signup()),
+    );
+  },
+  child: Container(
+    margin: EdgeInsets.symmetric(horizontal: 20.0),
+    child: Material(
+      elevation: 2.0,
+      borderRadius: BorderRadius.circular(10.0),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.delete, color: Colors.black),
+            SizedBox(width: 20.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Delete',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+),
           SizedBox(
             height: 20.0,
           ),
           GestureDetector(
             onTap: ()async {
               await AuthMethods().SignOut();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SplashScreen()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginIn()));
               
               },
             child: Container(

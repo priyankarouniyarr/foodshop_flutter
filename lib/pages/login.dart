@@ -31,7 +31,7 @@ class _LoginInState extends State<LoginIn> {
         email: email,
         password: password,
       );
-        await Future.delayed(Duration(seconds: 4));//LOADING SCREEN
+        await Future.delayed(Duration(seconds: 5));//LOADING SCREEN
       if(resp.user!.email == "priyankarouniyar34@gmail.com"){
         Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeAdmin()));

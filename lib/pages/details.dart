@@ -62,7 +62,7 @@ class _DetailsState extends State<Details> {
                   widget.image,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 2.5,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                 ),
               ),
               SizedBox(height: 15.0),
@@ -174,7 +174,7 @@ class _DetailsState extends State<Details> {
                           Container(
                             padding: EdgeInsets.all(3),
                             decoration: BoxDecoration(
-                              color: Colors.green,
+                              color: Color.fromARGB(255, 19, 90, 21),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Icon(Icons.shopping_cart_outlined,
