@@ -1,6 +1,7 @@
 # foodshop
 
-A new Flutter project.
+A new Flutter project. Its is design for a demo purpose while doing practise
+
 
 ## Getting Started
 
