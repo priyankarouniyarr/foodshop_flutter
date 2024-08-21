@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:foodshop/pages/login.dart';
+import 'package:foodshop/pages/onboard.dart';
 import 'package:foodshop/pages/signup.dart';
 import 'package:foodshop/service/auth.dart';
 import 'package:foodshop/service/shared_pref.dart';
@@ -21,38 +21,41 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String? profile, name, email;
+  String? profile, name, email, profilePic;
   final ImagePicker _picker = ImagePicker();
   File? selectedImage;
 
   Future<void> getImage() async {
     var image = await _picker.pickImage(source: ImageSource.gallery);
+    
     selectedImage = File(image!.path);
-    setState(() {
+      print(selectedImage != null);
       uploadItem();
-    });
+    
   }
 
-  uploadItem() async* {
+  uploadItem() async {
+    print(selectedImage == null);
     if (selectedImage != null) {
       String addId = randomAlphaNumeric(10); // Add data to Firebase Storage
-
       Reference firebaseStorageRef =
-          FirebaseStorage.instance.ref().child("blogImages").child(addId);
-
+          FirebaseStorage.instance.ref().child("ProfileImages").child(addId);
       // Start the upload task
       final UploadTask task = firebaseStorageRef.putFile(selectedImage!);
       // Get the download URL
       var downloadUrl = await (await task).ref.getDownloadURL();
+      
       await SharedPreferenceHelper().saveUserProfile(downloadUrl);
+      
       setState(() {});
     }
   }
 
   getthesharedpre() async {
     profile = await SharedPreferenceHelper().getUserProfile();
+  
     name = await SharedPreferenceHelper().getUserName();
-    email = await SharedPreferenceHelper().getUserEmail();
+     email = await SharedPreferenceHelper().getUserEmail();
     setState(() {});
   }
 
@@ -105,8 +108,8 @@ class _ProfileState extends State<Profile> {
                           onTap:(){
                             getImage();
                           },
-                          child:profile==null?Icon(Icons.person, size: 100, color: Colors.grey,):Image.network(
-                            profile!,
+                          child:profile==null?Icon(Icons.person, size: 100, color: Colors.grey,):CachedNetworkImage(
+                         imageUrl:   profile!,
                               height: 120, width:120 , fit: BoxFit.cover)
                         ):
                         Image.file(selectedImage!,height:120,width:120,fit:BoxFit.cover),
@@ -240,26 +243,29 @@ class _ProfileState extends State<Profile> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Center(
-          child: CircularProgressIndicator( strokeWidth: 5.0,
-            color: Colors.lightGreen[300],),
+          child: CircularProgressIndicator(
+            strokeWidth: 5.0,
+            color: Colors.lightGreen[400],
+          ),
         );
       },
     );
 
-    // lete operation
-    await AuthMethods().deleteuser();
-
-    // Delay for 2 seconds
-    await Future.delayed(Duration(seconds: 2));
-
+    try {
+      await AuthMethods().deleteUser();
     
-    Navigator.pop(context);
-
-    // Navigate to signup page
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => Signup()),
-    );
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Onboard()),
+      );
+    } catch (e) {
+      
+      Navigator.pop(context);
+      print('Error occurred: $e');
+      
+    }
   },
   child: Container(
     margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -295,6 +301,7 @@ class _ProfileState extends State<Profile> {
     ),
   ),
 ),
+
           SizedBox(
             height: 20.0,
           ),

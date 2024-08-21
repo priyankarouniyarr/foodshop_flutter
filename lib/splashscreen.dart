@@ -22,11 +22,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _controller.forward();
 
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Onboard()), // Replace with your onboarding screen
-        );
-      }
+     if (status == AnimationStatus.completed) {
+       Navigator.of(context).pushReplacement(
+         MaterialPageRoute(builder: (context) => Onboard()), // Replace with your onboarding screen
+       );
+     }
     });
   }
 
@@ -43,9 +43,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.green[200]!, // Lighter green
-              Colors.green[400]!, // Medium green
-              Colors.green[600]!, // Darker green
+              const Color.fromARGB(255, 26, 119, 131)!, // Lighter green
+              const Color.fromARGB(255, 29, 141, 35)!, // Medium green
+              const Color.fromARGB(255, 192, 176, 27)!, // Darker green
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

@@ -9,8 +9,20 @@ getCurrentUser() async{
 Future SignOut() async{
   await FirebaseAuth.instance.signOut();
 }
-Future deleteuser() async{
-  User? user = await FirebaseAuth.instance.currentUser;
-   user?.delete();
-}
+ Future<void> deleteUser() async {
+    try {
+      User? user = await auth.currentUser;
+      if (user != null) {
+    
+        
+      
+        await user.delete();
+      
+ 
+      }
+    } catch (e) {
+      print('Error deleting user: $e');
+     
+    }
+  }
 }

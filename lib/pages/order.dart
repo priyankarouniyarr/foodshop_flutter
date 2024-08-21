@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodshop/Widget/widget_support.dart';
@@ -24,13 +25,22 @@ class _OrderingState extends State<Ordering> {
     });
   }
 
-  getthesharedpref() async {
+  void removeItemFromCart(String foodId) async {
+    if (id != null) {
+      await DatabaseMethods().removeFoodFromCart(id!, foodId);
+
+      // Refresh the stream to reflect the changes
+      setState(() {});
+    }
+  }
+
+  Future<void> getthesharedpref() async {
     id = await SharedPreferenceHelper().getUserId();
     wallet = await SharedPreferenceHelper().getUserWallet();
     setState(() {});
   }
 
-  ontheload() async {
+  Future<void> ontheload() async {
     await getthesharedpref();
     foodStream = await DatabaseMethods().getFoodCart(id!);
     setState(() {});
@@ -50,22 +60,23 @@ class _OrderingState extends State<Ordering> {
       stream: foodStream,
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
+          total = 0; // Reset total before calculating
           return ListView.builder(
             padding: EdgeInsets.zero,
             itemCount: snapshot.data.docs.length,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               DocumentSnapshot ds = snapshot.data.docs[index];
-              total = total + int.parse(ds["total"]);
+              total += int.parse(ds["total"]);
+              String foodId = ds.id; // Get document ID
               return Container(
                 margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
                 child: Material(
                   elevation: 5.0,
+                  borderRadius: BorderRadius.circular(30),
                   child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.all(10),
                     child: Column(
                       children: [
@@ -74,21 +85,25 @@ class _OrderingState extends State<Ordering> {
                           children: [
                             GestureDetector(
                               onTap: () {
+                                removeItemFromCart(
+                                    foodId); // Call the method to remove the item
                               },
-                              child: Icon(Icons.close,size:15,color:Colors.black))]),
-                            SizedBox(
-                              height: 10.0,
+                              child: Icon(Icons.close,
+                                  size: 15, color: Colors.black),
                             ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(20),
-                              child: Image.network(
-                                ds["Image"],
-                                height: 90,
-                                width: 90,
+                              child: CachedNetworkImage(
+                               imageUrl:  ds["Image"],
+                                height: 60,
+                                width: 60,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -99,7 +114,8 @@ class _OrderingState extends State<Ordering> {
                                 Container(
                                   width: 120,
                                   child: Text(ds["name"],
-                                      style: AppWidget.SemiBoldTextFieldWidget()),
+                                      style:
+                                          AppWidget.SemiBoldTextFieldWidget()),
                                 ),
                                 Text("Rs\t" + ds["total"],
                                     style: AppWidget.SemiBoldTextFieldWidget()
@@ -125,111 +141,121 @@ class _OrderingState extends State<Ordering> {
             },
           );
         } else {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
   }
 
-  void deductWalletAmount() async {
+  Future<void> deductWalletAmount() async {
     int availableAmount = int.parse(wallet!);
-    if (availableAmount >= amount2) {
-      int updatedAmount = availableAmount - amount2;
+    if (total > 0) {
+      // Check if there are items in the cart
+      if (availableAmount >= total) {
+        int updatedAmount = availableAmount - total;
+        await DatabaseMethods().Updateuserwallet(id!, updatedAmount.toString());
 
-      // Update the wallet balance in the database
-      await DatabaseMethods().Updateuserwallet(id!, updatedAmount.toString());
+        await SharedPreferenceHelper().saveUserWallet(updatedAmount.toString());
+        await DatabaseMethods().clearCart(id!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text('Payment successful! Remaining balance: Rs $updatedAmount')),
+        );
+print(updatedAmount);
+        setState(() {
+          wallet = updatedAmount.toString();
+          total = 0;
+        });
 
-      // Update the wallet balance in shared preferences
-      await SharedPreferenceHelper().saveUserWallet(updatedAmount.toString());
-
-      setState(() {
-        wallet = updatedAmount.toString();
-      });
-
-      // Display a success message or navigate to another page
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Payment successful! Remaining balance: Rs $wallet')),
-      );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => Bottomnav()),
+        // );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Insufficient balance in wallet!')),
+        );
+      }
     } else {
-      // Display an error message if the wallet balance is insufficient
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Insufficient balance in wallet!')),
+        SnackBar(content: Text('No items in the cart!')),
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(top: 50),
-          child: Column(
-            children: [
-              Material(
-                elevation: 2.0,
-                child: Container(
-                  padding: EdgeInsets.only(bottom: 10.0),
-                  child: Center(
-                    child: Text("Food Cart",
-                        style: AppWidget.HeadlineTextFieldWidget()),
+      body: Container(
+        padding: EdgeInsets.only(top: 50),
+        child: Column(
+          
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: Center(
+                child:
+                    Text("Food Cart", style: AppWidget.boldTextFieldWidget()),
+              ),
+            ),
+            Divider(),
+            SizedBox(height: 20.0),
+            Expanded(child: foodCart()),
+            
+            SizedBox(height: 20.0),
+             Align(
+        alignment: Alignment.bottomCenter,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          
+          children: [
+            Divider(),
+            SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Total Price",
+                      style: AppWidget.LightTextFieldWidget()
+                          .copyWith(fontSize: 18.0)),
+                  Text("Rs\t" + total.toString(),
+                      style: AppWidget.LightTextFieldWidget()
+                          .copyWith(fontSize: 18)),
+                ],
+              ),
+            ),
+            SizedBox(height: 20.0),
+            GestureDetector(
+              onTap: () {
+                deductWalletAmount();
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => Bottomnav()));
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                margin:
+                    EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Center(
+                  child: Text(
+                    "CheckOut",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0),
                   ),
                 ),
               ),
-              SizedBox(height: 20.0),
-              foodCart(),
-              Divider(),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Total Price", style: AppWidget.boldTextFieldWidget()),
-                    Text("Rs\t" + total.toString(),
-                        style: AppWidget.SemiBoldTextFieldWidget()),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Available Wallet Balance",
-                        style: AppWidget.boldTextFieldWidget().copyWith(fontSize: 18)),
-                    Text("Rs\t" + (wallet ?? "0"),
-                        style: AppWidget.SemiBoldTextFieldWidget()),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20.0),
-              GestureDetector(
-                onTap: () {
-                  deductWalletAmount();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context)=> Bottomnav()));
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                  margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                  decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Center(
-                    child: Text(
-                      "CheckOut",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
+       ] ),
       ),
     );
   }

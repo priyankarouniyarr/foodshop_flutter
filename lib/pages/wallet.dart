@@ -5,7 +5,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:foodshop/Widget/app_constant%20.dart';
 import 'package:foodshop/service/database.dart';
-// Ensure the path is correct
 import 'package:foodshop/service/shared_pref.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,7 +47,7 @@ class _WalletState extends State<Wallet> {
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: paymentIntent!['client_secret'],
           style: ThemeMode.dark,
-          merchantDisplayName: 'Adnan',
+          merchantDisplayName: '',
         ),
       );
       await displayPaymentSheet();
@@ -75,7 +74,7 @@ class _WalletState extends State<Wallet> {
                   children: [
                     Icon(Icons.check_circle, color: Colors.green),
                     SizedBox(width: 8),
-                    Text("Payment successful"),
+                    Text("Sucessfully Loaded Money"),
                   ],
                 ),
               ],
@@ -179,10 +178,9 @@ class _WalletState extends State<Wallet> {
                     height: 20,
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                       makePayment(amountcontroller.text);
-                      
                     },
                     child: Container(
                         width: 100,
@@ -190,7 +188,9 @@ class _WalletState extends State<Wallet> {
                         decoration: BoxDecoration(
                             color: Color.fromARGB(255, 92, 173, 103),
                             borderRadius: BorderRadius.circular(10)),
-                        child: Center(child: Text("Pay", style: TextStyle(color: Colors.white)))),
+                        child: Center(
+                            child: Text("Pay",
+                                style: TextStyle(color: Colors.white)))),
                   )
                 ],
               ),
@@ -271,19 +271,21 @@ class _WalletState extends State<Wallet> {
                   ),
                   SizedBox(height: 10.0),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _amountButton("Rs 100", onPressed: () {
-                        
                         amount = '100';
                         makePayment('100');
                       }),
+                      
                       _amountButton("Rs 500",
                           onPressed: () =>
                               {amount = '500', makePayment('500')}),
+                            
                       _amountButton("Rs 1000",
                           onPressed: () =>
                               {amount = '1000', makePayment('1000')}),
+                        
                       _amountButton("Rs 5000",
                           isHighlighted: true,
                           onPressed: () =>
@@ -293,7 +295,8 @@ class _WalletState extends State<Wallet> {
                   SizedBox(height: 40.0),
                   GestureDetector(
                     onTap: () {
-                      openEdit();},
+                      openEdit();
+                    },
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 20.0),
                       padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -322,19 +325,22 @@ class _WalletState extends State<Wallet> {
 
   Widget _amountButton(String amount,
       {bool isHighlighted = false, required VoidCallback onPressed}) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isHighlighted ? Colors.grey[200] : Color(0xFFE9E2E2),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
+    return Container(
+      
+                child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isHighlighted ? Colors.grey[200] : Color(0xFFE9E2E2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
         ),
-      ),
-      child: Text(
-        amount,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.normal,
+        child: Text(
+          amount,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w100,
+          ),
         ),
       ),
     );

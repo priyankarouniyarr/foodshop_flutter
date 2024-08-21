@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,7 @@ import 'package:foodshop/Widget/widget_support.dart';
 import 'package:foodshop/pages/details.dart';
 import 'package:foodshop/pages/order.dart';
 import 'package:foodshop/service/database.dart';
+import 'package:foodshop/service/shared_pref.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,7 +28,7 @@ class HomeState extends State<Home> {
   bool noodles = false;
   bool itali =false;
   bool more = false;
-
+  String? name;
   Stream? fooditemStream;
   
 
@@ -38,8 +40,15 @@ class HomeState extends State<Home> {
   @override
   void initState() {
     ontheload();
-    
+    getthesharedpre();
     super.initState();
+  }
+
+   getthesharedpre() async {
+  
+    name = await SharedPreferenceHelper().getUserName();
+    
+    setState(() {});
   }
  
   Widget allItems() {
@@ -82,7 +91,8 @@ class HomeState extends State<Home> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Center(
-                                child: Image.network(ds['Image'],
+                                child: CachedNetworkImage(
+                                  imageUrl:ds['Image'],
                                     height: 180, width: 200, fit: BoxFit.cover),
                               ),
                             ),
@@ -154,8 +164,8 @@ class HomeState extends State<Home> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                ds['Image'],
+                              child: CachedNetworkImage(
+                              imageUrl:  ds['Image'],
                                 height: 120,
                                 width: 120,
                                 fit: BoxFit.fill,
@@ -210,15 +220,17 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    
       body: Container(
         margin: EdgeInsets.only(top: 50.0, left: 20.0),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                SizedBox(height:10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Hello Priyanka", style: AppWidget.boldTextFieldWidget()),
+                Text("Hi, $name", style: AppWidget.boldTextFieldWidget().copyWith(color:Colors.grey,fontSize: 30)),
                 InkWell(
                   onTap: () {
                       Navigator.push(
@@ -238,7 +250,7 @@ class HomeState extends State<Home> {
                 ),
               ],
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             Text("Deliciousness in Every Easy Bite", style: AppWidget.HeadlineTextFieldWidget().copyWith(fontSize:20,color: const Color.fromARGB(255, 65, 117, 67))),
             Text("Simple, Satisfying, and Always Delicious!",
                 style: AppWidget.LightTextFieldWidget()),
