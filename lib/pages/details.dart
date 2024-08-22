@@ -60,33 +60,36 @@ class _DetailsState extends State<Details> {
                 child:
                     const Icon(Icons.arrow_back_ios_new, color: Colors.black),
               ),
-              const SizedBox(
-                height: 20.0,
-              ),
-
-              ClipRRect(
-                borderRadius: BorderRadius.circular(30.0),
-                child: CachedNetworkImage(
-               imageUrl:   widget.image,
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 3.5,
-                  fit: BoxFit.cover,
+          
+              Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: CachedNetworkImage(
+                                 imageUrl:   widget.image,
+                    width: MediaQuery.of(context).size.width/1.5,
+                    height: MediaQuery.of(context).size.height /3,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 30.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(widget.name,
-                            style: AppWidget.SemiBoldTextFieldWidget()),
-                      ],
-                    ),
-                  ),
+                  // ignore: avoid_unnecessary_containers
+              
+                    
+                 Container(
+                  width:MediaQuery.of(context).size.width/1.99,
+                   child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(widget.name,
+                              style: AppWidget.SemiBoldTextFieldWidget().copyWith(fontSize: 18,color: Colors.black)),
+                        ],
+                      ),
+                 ),
+                  
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
@@ -98,7 +101,7 @@ class _DetailsState extends State<Details> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Colors.black,
+                          color: Colors.green,
                           borderRadius: BorderRadius.circular(8)),
                       child: const Icon(Icons.remove, color: Colors.white),
                     ),
@@ -115,7 +118,7 @@ class _DetailsState extends State<Details> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Colors.black,
+                          color: Colors.green,
                           borderRadius: BorderRadius.circular(8)),
                       child: const Icon(Icons.add, color: Colors.white),
                     ),
@@ -126,21 +129,24 @@ class _DetailsState extends State<Details> {
               Text(
                 widget.description,
                 style:
-                    AppWidget.LightTextFieldWidget().copyWith(wordSpacing: 20),
+                    AppWidget.LightTextFieldWidget().copyWith(wordSpacing: 5, ),
+                     textAlign: TextAlign.justify
               ),
               const SizedBox(height: 30.0),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Delivery Time", style: AppWidget.boldTextFieldWidget()),
-                  const SizedBox(width: 25.0),
+                //  const SizedBox(width: 25.0),
                   const Icon(Icons.alarm, color: Colors.black54),
-                  const SizedBox(width: 5.0),
+            
                   Text("30 minutes",
                       style: AppWidget.SemiBoldTextFieldWidget()),
                 ],
               ),
-              const SizedBox(height: 40.0),
+              SizedBox(
+                height: 40.0,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

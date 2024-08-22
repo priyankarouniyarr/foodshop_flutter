@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';//user details to save locally
 
 class SharedPreferenceHelper {
+  
   static const String userIdKey = "USERKEY";
   static const String userNameKey = "USERNAMEKEY";
   static const String userWalletKey = "USERWALLETKEY";//saving data
@@ -23,7 +24,6 @@ class SharedPreferenceHelper {
 
   }
 
-
   Future<bool> saveUserWallet(String userWallet) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(userWalletKey, userWallet);
@@ -33,6 +33,10 @@ class SharedPreferenceHelper {
     return prefs.setString(userProfileKey, userProfile);
   }
 
+  Future<void> clearAll() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
 
 
   Future<String?> getUserId() async{

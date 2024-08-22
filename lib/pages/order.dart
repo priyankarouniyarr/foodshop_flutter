@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodshop/Widget/widget_support.dart';
 import 'package:foodshop/pages/bottomnav.dart';
+import 'package:foodshop/pages/sucesspage.dart';
 import 'package:foodshop/service/database.dart';
 import 'package:foodshop/service/shared_pref.dart';
 
@@ -65,7 +66,6 @@ class _OrderingState extends State<Ordering> {
             padding: EdgeInsets.zero,
             itemCount: snapshot.data.docs.length,
             shrinkWrap: true,
-            
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               DocumentSnapshot ds = snapshot.data.docs[index];
@@ -99,23 +99,24 @@ class _OrderingState extends State<Ordering> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(10),
                               child: CachedNetworkImage(
-                               imageUrl:  ds["Image"],
-                                height: 60,
-                                width: 60,
+                                imageUrl: ds["Image"],
+                                height: 100,
+                                width: 100,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            SizedBox(width: 10.0),
+                            SizedBox(width: 15.0),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  width: 120,
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.5,
                                   child: Text(ds["name"],
-                                      style:
-                                          AppWidget.SemiBoldTextFieldWidget()),
+                                      style: AppWidget.SemiBoldTextFieldWidget()
+                                          .copyWith(fontSize: 15)),
                                 ),
                                 Text("Rs\t" + ds["total"],
                                     style: AppWidget.SemiBoldTextFieldWidget()
@@ -123,13 +124,15 @@ class _OrderingState extends State<Ordering> {
                               ],
                             ),
                             SizedBox(width: 10.0),
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 2),
-                                  borderRadius: BorderRadius.circular(20)),
-                              height: 70,
-                              width: 50,
-                              child: Center(child: Text(ds["quantity"])),
+                            Center(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 1),
+                                    borderRadius: BorderRadius.circular(20)),
+                                height: 50,
+                                width: 50,
+                                child: Center(child: Text(ds["quantity"])),
+                              ),
                             ),
                           ],
                         ),
@@ -147,40 +150,54 @@ class _OrderingState extends State<Ordering> {
     );
   }
 
-  Future<void> deductWalletAmount() async {
+  Future<bool> deductWalletAmount() async {
     int availableAmount = int.parse(wallet!);
     if (total > 0) {
-      // Check if there are items in the cart
       if (availableAmount >= total) {
         int updatedAmount = availableAmount - total;
         await DatabaseMethods().Updateuserwallet(id!, updatedAmount.toString());
-
         await SharedPreferenceHelper().saveUserWallet(updatedAmount.toString());
         await DatabaseMethods().clearCart(id!);
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content:
-                  Text('Payment successful! Remaining balance: Rs $updatedAmount')),
+            backgroundColor: Colors.amber,
+            content: Text(
+                'Payment successful! Remaining balance: Rs $updatedAmount',
+                style: AppWidget.LightTextFieldWidget()
+                    .copyWith(color: Colors.white)),
+          ),
         );
-print(updatedAmount);
+
         setState(() {
           wallet = updatedAmount.toString();
           total = 0;
         });
-
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => Bottomnav()),
-        // );
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => DonePage()));
+        return true;
+        // Payment successful
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Insufficient balance in wallet!')),
+          SnackBar(
+            backgroundColor: Colors.amber,
+            content: Text('Insufficient balance in wallet!',
+                style: AppWidget.LightTextFieldWidget()
+                    .copyWith(color: Colors.white)),
+          ),
         );
+        return false; // Payment failed
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No items in the cart!')),
+        SnackBar(
+          backgroundColor: Colors.amber,
+          content: Text('No items in the cart!',
+              style: AppWidget.LightTextFieldWidget()
+                  .copyWith(color: Colors.white)),
+        ),
       );
+      return false; // No items to pay for
     }
   }
 
@@ -189,73 +206,65 @@ print(updatedAmount);
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(top: 50),
-        child: Column(
-          
-          children: [
-            Container(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: Center(
-                child:
-                    Text("Food Cart", style: AppWidget.boldTextFieldWidget()),
-              ),
+        child: Column(children: [
+          Container(
+            padding: EdgeInsets.only(bottom: 10.0),
+            child: Center(
+              child: Text("Food Cart", style: AppWidget.boldTextFieldWidget()),
             ),
-            Divider(),
-            SizedBox(height: 20.0),
-            Expanded(child: foodCart()),
-            
-            SizedBox(height: 20.0),
-             Align(
-        alignment: Alignment.bottomCenter,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          
-          children: [
-            Divider(),
-            SizedBox(height: 20.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Total Price",
-                      style: AppWidget.LightTextFieldWidget()
-                          .copyWith(fontSize: 18.0)),
-                  Text("Rs\t" + total.toString(),
-                      style: AppWidget.LightTextFieldWidget()
-                          .copyWith(fontSize: 18)),
-                ],
-              ),
-            ),
-            SizedBox(height: 20.0),
-            GestureDetector(
-              onTap: () {
-                deductWalletAmount();
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => Bottomnav()));
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                margin:
-                    EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Center(
-                  child: Text(
-                    "CheckOut",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0),
+          ),
+          SizedBox(height: 20.0),
+          Expanded(child: foodCart()),
+          SizedBox(height: 20.0),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Divider(),
+                SizedBox(height: 20.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Total Price",
+                          style: AppWidget.LightTextFieldWidget()
+                              .copyWith(fontSize: 18.0)),
+                      Text("Rs\t" + total.toString(),
+                          style: AppWidget.LightTextFieldWidget()
+                              .copyWith(fontSize: 18)),
+                    ],
                   ),
                 ),
-              ),
+                SizedBox(height: 20.0),
+                GestureDetector(
+                  onTap: () {
+                    deductWalletAmount();
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(vertical: 10.0),
+                    margin:
+                        EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Center(
+                      child: Text(
+                        "CheckOut",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-       ] ),
+          ),
+        ]),
       ),
     );
   }

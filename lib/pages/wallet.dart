@@ -5,6 +5,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:foodshop/Widget/app_constant%20.dart';
 import 'package:foodshop/service/database.dart';
+
 import 'package:foodshop/service/shared_pref.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,7 +48,7 @@ class _WalletState extends State<Wallet> {
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: paymentIntent!['client_secret'],
           style: ThemeMode.dark,
-          merchantDisplayName: '',
+          merchantDisplayName: 'Priyanka',
         ),
       );
       await displayPaymentSheet();

@@ -12,6 +12,7 @@ import 'package:foodshop/service/shared_pref.dart';
 import 'package:foodshop/splashscreen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -52,8 +53,7 @@ class _ProfileState extends State<Profile> {
   }
 
   getthesharedpre() async {
-    profile = await SharedPreferenceHelper().getUserProfile();
-  
+    profile = await SharedPreferenceHelper().getUserProfile();  
     name = await SharedPreferenceHelper().getUserName();
      email = await SharedPreferenceHelper().getUserEmail();
     setState(() {});
@@ -108,9 +108,10 @@ class _ProfileState extends State<Profile> {
                           onTap:(){
                             getImage();
                           },
-                          child:profile==null?Icon(Icons.person, size: 100, color: Colors.grey,):CachedNetworkImage(
-                         imageUrl:   profile!,
-                              height: 120, width:120 , fit: BoxFit.cover)
+                          child:profile == null
+  ? Icon(Icons.person, size: 100, color: Colors.grey)
+  : CachedNetworkImage(imageUrl: profile!, height: 120, width: 120, fit: BoxFit.cover)
+
                         ):
                         Image.file(selectedImage!,height:120,width:120,fit:BoxFit.cover),
                       )),
@@ -307,6 +308,7 @@ class _ProfileState extends State<Profile> {
           ),
           GestureDetector(
             onTap: ()async {
+               
               await AuthMethods().SignOut();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginIn()));
               
