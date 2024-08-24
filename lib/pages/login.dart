@@ -25,13 +25,15 @@ class _LoginInState extends State<LoginIn> {
   userLogin() async {
     setState(() {
       isLoading = true; // Show loading screen
+  
     });
+    
     try {
       final resp = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-        await Future.delayed(Duration(seconds: 5));//LOADING SCREEN
+        await Future.delayed(Duration(seconds: 3));//LOADING SCREEN
       if(resp.user!.email == "priyankarouniyar34@gmail.com"){
         Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeAdmin()));
@@ -39,6 +41,9 @@ class _LoginInState extends State<LoginIn> {
       }
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Bottomnav()));
+         
+
+          
     } on FirebaseAuthException catch (e) {
       print('Error Code: ${e.code}');
       String errorMessage;
@@ -145,6 +150,7 @@ class _LoginInState extends State<LoginIn> {
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your email';
+                                            
                                           }
                                           return null;
                                         },
@@ -200,6 +206,7 @@ class _LoginInState extends State<LoginIn> {
                                             });
                                             userLogin();
                                           }
+                                          
                                         },
                                         child: Material(
                                           elevation: 5.0,

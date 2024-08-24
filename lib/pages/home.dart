@@ -47,7 +47,7 @@ class HomeState extends State<Home> {
    getthesharedpre() async {
   
     name = await SharedPreferenceHelper().getUserName();
-    print (name);
+   // print (name);
     
     setState(() {});
   }

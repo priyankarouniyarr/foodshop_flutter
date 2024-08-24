@@ -33,9 +33,11 @@ class SharedPreferenceHelper {
     return prefs.setString(userProfileKey, userProfile);
   }
 
-  Future<void> clearAll() async {
+  Future<void> clear() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    await prefs.remove('userProfile');
+    await prefs.remove('userName');
+    await prefs.remove('userEmail');
   }
 
 

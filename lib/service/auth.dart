@@ -9,7 +9,7 @@ class AuthMethods {
 
   Future SignOut() async {
     await FirebaseAuth.instance.signOut();
-   // await SharedPreferenceHelper().clearAll();
+   await SharedPreferenceHelper().clear();
   }
 
   Future<void> deleteUser() async {
