@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:foodshop/admin/adminhome.dart';
 import 'package:foodshop/pages/bottomnav.dart';
 import 'package:foodshop/pages/forgetpassword.dart';
 import 'package:foodshop/pages/signup.dart';
+import 'package:foodshop/service/database.dart';
+import 'package:foodshop/service/shared_pref.dart';
 
 class LoginIn extends StatefulWidget {
   const LoginIn({super.key});
@@ -21,35 +24,51 @@ class _LoginInState extends State<LoginIn> {
   TextEditingController useremailcontroller = TextEditingController();
   TextEditingController userpasswordcontroller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  DatabaseMethods databaseMethods = DatabaseMethods();
+  SharedPreferenceHelper db = SharedPreferenceHelper();
 
   userLogin() async {
     setState(() {
       isLoading = true; // Show loading screen
-  
     });
-    
+
     try {
       final resp = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-        await Future.delayed(Duration(seconds: 3));//LOADING SCREEN
-      if(resp.user!.email == "priyankarouniyar34@gmail.com"){
+
+      ///here aamir added code
+
+      if (resp.user != null) {
+        DocumentSnapshot<Map<String, dynamic>> data =
+            await databaseMethods.getUserDetails(resp.user!.uid);
+
+        /// [getUserDetails] ye function v likhe. check it out
+
+        if (data.exists) {
+          await db.saveUserName(data["Username"]);
+        } else {
+          await db.saveUserName("No name");
+        }
+      }
+
+      /// aamir ended code
+
+      await Future.delayed(Duration(seconds: 3)); //LOADING SCREEN
+      if (resp.user!.email == "priyankarouniyar34@gmail.com") {
         Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeAdmin()));
+            context, MaterialPageRoute(builder: (context) => HomeAdmin()));
         return;
       }
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Bottomnav()));
-         
-
-          
     } on FirebaseAuthException catch (e) {
       print('Error Code: ${e.code}');
       String errorMessage;
       if (e.code == 'invalid-credential') {
         errorMessage = "No user found for that Email";
-      }  else {
+      } else {
         errorMessage = "An unexpected error occurred: ${e.code}";
       }
 
@@ -74,10 +93,11 @@ class _LoginInState extends State<LoginIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? Center(child: CircularProgressIndicator(
-            strokeWidth: 5.0,
-            color: Colors.lightGreen[200],
-          ))
+          ? Center(
+              child: CircularProgressIndicator(
+              strokeWidth: 5.0,
+              color: Colors.lightGreen[200],
+            ))
           : SingleChildScrollView(
               child: Container(
                 child: Stack(
@@ -125,8 +145,7 @@ class _LoginInState extends State<LoginIn> {
                             elevation: 5.0,
                             borderRadius: BorderRadius.circular(20),
                             child: Container(
-                              padding:
-                                  EdgeInsets.only(left: 20.0, right: 20.0),
+                              padding: EdgeInsets.only(left: 20.0, right: 20.0),
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height / 2,
                               decoration: BoxDecoration(
@@ -141,8 +160,8 @@ class _LoginInState extends State<LoginIn> {
                                       SizedBox(height: 30.0),
                                       Text(
                                         "LogIn",
-                                        style: AppWidget
-                                            .HeadlineTextFieldWidget(),
+                                        style:
+                                            AppWidget.HeadlineTextFieldWidget(),
                                       ),
                                       SizedBox(height: 30.0),
                                       TextFormField(
@@ -150,7 +169,6 @@ class _LoginInState extends State<LoginIn> {
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your email';
-                                            
                                           }
                                           return null;
                                         },
@@ -182,9 +200,13 @@ class _LoginInState extends State<LoginIn> {
                                       ),
                                       SizedBox(height: 40.0),
                                       GestureDetector(
-                                        onTap: ()  {
-                                          Navigator.pushReplacement(context,MaterialPageRoute(builder: 
-                                          (context) => Forgetpassword()));},
+                                        onTap: () {
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Forgetpassword()));
+                                        },
                                         child: Container(
                                           alignment: Alignment.topCenter,
                                           child: Text(
@@ -201,12 +223,11 @@ class _LoginInState extends State<LoginIn> {
                                               .validate()) {
                                             setState(() {
                                               email = useremailcontroller.text;
-                                              password = userpasswordcontroller
-                                                  .text;
+                                              password =
+                                                  userpasswordcontroller.text;
                                             });
                                             userLogin();
                                           }
-                                          
                                         },
                                         child: Material(
                                           elevation: 5.0,
@@ -256,11 +277,10 @@ class _LoginInState extends State<LoginIn> {
                                 children: [
                                   TextSpan(
                                     text: "Sign Up",
-                                    style: AppWidget
-                                        .SemiBoldTextFieldWidget()
+                                    style: AppWidget.SemiBoldTextFieldWidget()
                                         .copyWith(
-                                          color: Color(0xFF87CEEB),
-                                        ),
+                                      color: Color(0xFF87CEEB),
+                                    ),
                                   ),
                                 ],
                               ),

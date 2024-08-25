@@ -37,7 +37,7 @@ class _SignupState extends State<Signup> {
             backgroundColor: Colors.green,
             content: Text(" Registered Successfully",
                 style: TextStyle(fontSize: 20.0)))));
-        String Id = randomAlphaNumeric(10);
+        String Id = userCredential.user!.uid;
 
         Map<String, dynamic> addUserInfo = {
           "Username": usernamecontroller.text, //wallet updates
