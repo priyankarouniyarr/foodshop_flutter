@@ -49,7 +49,7 @@ dependencies:
   lottie: ^2.2.0
   cached_network_image: 
   get_it: 
- 
+  
 
 
 dev_dependencies:
