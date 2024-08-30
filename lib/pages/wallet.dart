@@ -202,7 +202,7 @@ class _WalletState extends State<Wallet> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: wallet == null
-          ? CircularProgressIndicator()
+          ? Center(child: CircularProgressIndicator())
           : Container(
               margin: EdgeInsets.only(top: 60.0),
               child: Column(

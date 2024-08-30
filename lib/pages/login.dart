@@ -9,7 +9,8 @@ import 'package:foodshop/pages/forgetpassword.dart';
 import 'package:foodshop/pages/signup.dart';
 import 'package:foodshop/service/database.dart';
 import 'package:foodshop/service/shared_pref.dart';
-
+import 'package:get_it/get_it.dart';
+final GetIt getIt = GetIt.instance;
 class LoginIn extends StatefulWidget {
   const LoginIn({super.key});
 
@@ -26,45 +27,68 @@ class _LoginInState extends State<LoginIn> {
   final _formKey = GlobalKey<FormState>();
   DatabaseMethods databaseMethods = DatabaseMethods();
   SharedPreferenceHelper db = SharedPreferenceHelper();
+   void initState() {
+    super.initState();
+    db = getIt<SharedPreferenceHelper>();
+    databaseMethods = getIt<DatabaseMethods>();
+  }
+
 
   userLogin() async {
     setState(() {
       isLoading = true; // Show loading screen
     });
 
-    try {
-      final resp = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+  try {
+    final resp = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
 
-      ///to check user details
+    if (resp.user != null) {
+      DocumentSnapshot<Map<String, dynamic>> data =
+          await databaseMethods.getUserDetails(resp.user!.uid);
 
-      if (resp.user != null) {
-        DocumentSnapshot<Map<String, dynamic>> data =
-            await databaseMethods.getUserDetails(resp.user!.uid);
+      if (data.exists) {
+        await db.saveUserName(data["Username"]);
+        await db.saveUserEmail(data["Email"]);
+        
 
-   //    [getUserDetails]  check it out
-
-print(data.data());
-        if (data.exists) {
-          await db.saveUserName(data["Username"]);
-             await db.saveUserEmail(data["Email"]);
-             
-         print(data.data());
-
-            
-          
-        }  
-        else {
-          await db.saveUserName("No name");
-           
+     if (data.data()!.containsKey("wallet")) {
+          var wallet = data.data()!["wallet"];
+          if (wallet != null) {
+            await db.saveUserWallet(wallet.toString());
+            print("Wallet updated: $wallet");
+          } else {
+            print("Wallet value is null");
+          }
+        } else {
+          print("Wallet key is missing");
         }
-      }
 
+       if (data.data()!.containsKey("Cart")) {
+          var cartItems = data.data()!["Cart"];
+          if (cartItems != null) {
+            await db.saveCartItems(cartItems);
+            print("Cart items updated: $cartItems");
+          } else {
+            print("Cart value is null");
+          }
+        } else {
+          print("Cart key is missing");
+        }
+      
+        print(data.data());
+        
+        
+        print("12233");
+      } else {
+        await db.saveUserName("No name");
+      }
+    }
     
 
-      await Future.delayed(Duration(seconds: 3)); //LOADING SCREEN
+      await Future.delayed(Duration(seconds:2 )); //LOADING SCREEN
       if (resp.user!.email == "priyankarouniyar34@gmail.com") {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeAdmin()));

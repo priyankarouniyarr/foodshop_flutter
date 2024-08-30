@@ -56,13 +56,21 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  getthesharedpre() async {
-    profile = await SharedPreferenceHelper().getUserProfile();
-    name = await SharedPreferenceHelper().getUserName();
-    email = await SharedPreferenceHelper().getUserEmail();
-    setState(() {});
-   
+ getthesharedpre() async {
+  profile = await SharedPreferenceHelper().getUserProfile();
+  print('Profile URL Retrieved: $profile');
+  print("hello");
+   // Debug: Check the retrieved URL;
+
+  // Set default profile picture if profile URL is null
+  if (profile == null || profile!.isEmpty) {
+    profile = null; // This will show the default icon
   }
+
+  name = await SharedPreferenceHelper().getUserName();
+  email = await SharedPreferenceHelper().getUserEmail();
+  setState(() {});
+}
 
   onthisload() async {
     await getthesharedpre();
@@ -322,6 +330,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     GestureDetector(
                       onTap: () async {
+                        await SharedPreferenceHelper().clearAll();
                         await AuthMethods().SignOut();
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) => LoginIn()));

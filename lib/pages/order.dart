@@ -152,6 +152,7 @@ class _OrderingState extends State<Ordering> {
 
   Future<bool> deductWalletAmount() async {
     int availableAmount = int.parse(wallet!);
+    
     if (total > 0) {
       if (availableAmount >= total) {
         int updatedAmount = availableAmount - total;

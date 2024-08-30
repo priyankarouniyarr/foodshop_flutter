@@ -7,6 +7,8 @@ class SharedPreferenceHelper {
   static const String userWalletKey = "USERWALLETKEY";//saving data
   static const String userEmailKey = "USEREMAILKEY";
    static const String userProfileKey = "USEREPROFILEKEY";
+   
+   static const String userFoodCart ="USERFOODCART";
   
 
   Future<bool> saveUserId(String userId) async {
@@ -24,25 +26,31 @@ class SharedPreferenceHelper {
 
   }
 
+ Future<bool> saveCartItems(String Cart) async {
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(userFoodCart, Cart);
+  }
   Future<bool> saveUserWallet(String userWallet) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(userWalletKey, userWallet);
+
   }
   Future<bool> saveUserProfile(String userProfile) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();//saving
     return prefs.setString(userProfileKey, userProfile);
   }
 
-  Future<void> clear() async {
+  Future<void> clearAll() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('userProfile');
-    await prefs.remove('userName');
-    await prefs.remove('userEmail');
+    await prefs.clear();
     
 
   }
-
-
+  Future <String?> getCartItems() async{
+    
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(userFoodCart);
+  }
   Future<String?> getUserId() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(userIdKey);

@@ -42,7 +42,7 @@ class _SignupState extends State<Signup> {
         Map<String, dynamic> addUserInfo = {
           "Username": usernamecontroller.text, //wallet updates
           "Email": mailcontroller.text,
-          "Wallet": "0",
+          "wallet": "0",
           "Id": Id
         };
         await DatabaseMethods().addUserDetail(addUserInfo, Id);

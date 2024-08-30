@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:foodshop/Widget/app_constant%20.dart';
 import 'package:foodshop/admin/adminhome.dart';
-import 'package:foodshop/pages/bottomnav.dart'; 
+import 'package:foodshop/pages/bottomnav.dart';
+import 'package:foodshop/service/servicelocator.dart'; 
 
 import 'package:foodshop/splashscreen.dart'; 
 final auth  = FirebaseAuth.instance;
@@ -20,6 +21,7 @@ void main() async {
       storageBucket: "food-deliveryapp-7988c.appspot.com",
     ),
   );
+   setupServiceLocator();
   runApp(const MyApp());
 }
 
