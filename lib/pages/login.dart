@@ -38,22 +38,31 @@ class _LoginInState extends State<LoginIn> {
         password: password,
       );
 
-      ///here aamir added code
+      ///to check user details
 
       if (resp.user != null) {
         DocumentSnapshot<Map<String, dynamic>> data =
             await databaseMethods.getUserDetails(resp.user!.uid);
 
-        /// [getUserDetails] ye function v likhe. check it out
+   //    [getUserDetails]  check it out
 
+print(data.data());
         if (data.exists) {
           await db.saveUserName(data["Username"]);
-        } else {
+             await db.saveUserEmail(data["Email"]);
+             
+         print(data.data());
+
+            
+          
+        }  
+        else {
           await db.saveUserName("No name");
+           
         }
       }
 
-      /// aamir ended code
+    
 
       await Future.delayed(Duration(seconds: 3)); //LOADING SCREEN
       if (resp.user!.email == "priyankarouniyar34@gmail.com") {
